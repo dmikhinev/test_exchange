@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    default_rate_provider: '%env(resolve:DEFAULT_RATE_PROVIDER)%'
 
 services:
     # default configuration for services in *this* file
@@ -26,3 +27,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    _instanceof:
+        App\RateProvider\RateProviderInterface:
+            tags: ['exchange.rate_provider']
+
+    App\Service\RateManager:
+        arguments:
+            $defaultProvider: "%default_rate_provider%"
